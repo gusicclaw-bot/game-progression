@@ -1,4 +1,10 @@
-import type { DeepDiveSection, NodeKind, NodeRecord } from '../types/gameData'
+import type {
+  DeepDiveSection,
+  NodeKind,
+  NodeRecord,
+  TimelineEra,
+  TimelineEvent,
+} from '../types/gameData'
 
 type DetailPanelProps = {
   node: NodeRecord
@@ -9,6 +15,8 @@ type DetailPanelProps = {
   totalCount: number
   activeKinds: string[]
   searchTerm: string
+  activeEra: TimelineEra
+  activeEvents: TimelineEvent[]
   onSelect: (id: string) => void
 }
 
@@ -21,6 +29,8 @@ export function DetailPanel({
   totalCount,
   activeKinds,
   searchTerm,
+  activeEra,
+  activeEvents,
   onSelect,
 }: DetailPanelProps) {
   return (
@@ -50,10 +60,22 @@ export function DetailPanel({
       <div className="detail-block">
         <h3>Current view</h3>
         <ul>
+          <li>Era: {activeEra.label} ({activeEra.range})</li>
           <li>
             Active filters: {activeKinds.map((kind) => kindLabels[kind as NodeKind]).join(', ')}
           </li>
           <li>Search: {searchTerm ? `“${searchTerm}”` : 'none'}</li>
+        </ul>
+      </div>
+
+      <div className="detail-block">
+        <h3>Timeline notes</h3>
+        <ul>
+          {activeEvents.map((event) => (
+            <li key={event.id}>
+              <strong>{event.yearLabel}</strong> — {event.title}
+            </li>
+          ))}
         </ul>
       </div>
 

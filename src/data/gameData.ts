@@ -1,4 +1,89 @@
-import type { DeepDiveSection, EdgeRecord, NodeKind, NodeRecord } from '../types/gameData'
+import type {
+  DeepDiveSection,
+  EdgeRecord,
+  NodeKind,
+  NodeRecord,
+  TimelineEra,
+  TimelineEvent,
+} from '../types/gameData'
+
+export const timelineEras: TimelineEra[] = [
+  {
+    id: 'origins',
+    label: 'Origins',
+    range: '1889–1979',
+    description: 'Nintendo’s long pre-modern history creates the anchor for the whole ecosystem.',
+  },
+  {
+    id: 'studio-foundations',
+    label: 'Studio foundations',
+    range: '1980–1989',
+    description: 'Key partner studios and leadership paths begin to form.',
+  },
+  {
+    id: 'global-breakthrough',
+    label: 'Global breakthrough',
+    range: '1990–1999',
+    description: 'Major character franchises become worldwide pillars of the ecosystem.',
+  },
+  {
+    id: 'leadership-legacy',
+    label: 'Leadership legacy',
+    range: '2000s+',
+    description: 'The graph starts to tell a story about stewardship, continuity, and influence.',
+  },
+]
+
+export const timelineEvents: TimelineEvent[] = [
+  {
+    id: 'nintendo-founded',
+    eraId: 'origins',
+    yearLabel: '1889',
+    title: 'Nintendo is founded',
+    summary: 'The ecosystem starts with Nintendo long before its modern video-game identity.',
+    relatedNodeIds: ['nintendo'],
+  },
+  {
+    id: 'hal-founded',
+    eraId: 'studio-foundations',
+    yearLabel: '1980',
+    title: 'HAL Laboratory forms',
+    summary: 'HAL becomes one of the important creative studios orbiting Nintendo’s world.',
+    relatedNodeIds: ['hal'],
+  },
+  {
+    id: 'gamefreak-founded',
+    eraId: 'studio-foundations',
+    yearLabel: '1989',
+    title: 'Game Freak is established',
+    summary: 'Game Freak enters the graph as a future creator of a global phenomenon.',
+    relatedNodeIds: ['game-freak'],
+  },
+  {
+    id: 'pokemon-launch',
+    eraId: 'global-breakthrough',
+    yearLabel: '1996',
+    title: 'Pokémon Red / Blue launches in Japan',
+    summary: 'A single RPG release reshapes the commercial and cultural scale of the network.',
+    relatedNodeIds: ['pokemon-red-blue', 'game-freak', 'nintendo'],
+  },
+  {
+    id: 'kirby-super-star',
+    eraId: 'global-breakthrough',
+    yearLabel: '1996',
+    title: 'Kirby Super Star shows modular game structure',
+    summary: 'The pilot’s second game example highlights how one release can express design variety.',
+    relatedNodeIds: ['kirby-super-star', 'hal'],
+  },
+  {
+    id: 'iwata-leadership',
+    eraId: 'leadership-legacy',
+    yearLabel: '2002',
+    title: 'Satoru Iwata becomes Nintendo president',
+    summary: 'A human node links technical craft, studio leadership, and executive stewardship.',
+    relatedNodeIds: ['satoru-iwata', 'nintendo', 'hal'],
+  },
+]
 
 export const nodes: NodeRecord[] = [
   {
@@ -11,6 +96,7 @@ export const nodes: NodeRecord[] = [
     description:
       'A pilot anchor node for the MVP: a legacy publisher and platform holder connected to multiple internal and partner studios.',
     highlights: ['Platform holder', 'Publisher', 'Franchise owner'],
+    timelineTags: ['origins', 'studio-foundations', 'global-breakthrough', 'leadership-legacy'],
   },
   {
     id: 'game-freak',
@@ -22,6 +108,7 @@ export const nodes: NodeRecord[] = [
     description:
       'Independent studio best known for developing the core Pokémon RPG line while collaborating closely with Nintendo.',
     highlights: ['Japan', 'RPG', 'Long-term partner'],
+    timelineTags: ['studio-foundations', 'global-breakthrough', 'leadership-legacy'],
   },
   {
     id: 'hal',
@@ -33,6 +120,7 @@ export const nodes: NodeRecord[] = [
     description:
       'Nintendo-affiliated studio behind Kirby and a long-running contributor to beloved first-party-style games.',
     highlights: ['Kirby', 'Smash roots', 'Partner studio'],
+    timelineTags: ['studio-foundations', 'global-breakthrough', 'leadership-legacy'],
   },
   {
     id: 'satoru-iwata',
@@ -44,6 +132,7 @@ export const nodes: NodeRecord[] = [
     description:
       'A key human connection node showing how people tie together studios, leadership, and game history.',
     highlights: ['Programmer', 'HAL leadership', 'Nintendo leadership'],
+    timelineTags: ['studio-foundations', 'leadership-legacy'],
   },
   {
     id: 'pokemon-red-blue',
@@ -55,6 +144,7 @@ export const nodes: NodeRecord[] = [
     description:
       'A landmark RPG release used in the pilot to demonstrate drill-down from industry node to studio to game.',
     highlights: ['Game Boy', 'Monster collecting', 'Global phenomenon'],
+    timelineTags: ['global-breakthrough', 'leadership-legacy'],
   },
   {
     id: 'kirby-super-star',
@@ -66,6 +156,7 @@ export const nodes: NodeRecord[] = [
     description:
       'Used as a second example game to show how the graph can compare franchises, teams, and release eras.',
     highlights: ['SNES', 'Platformer', 'Multi-scenario structure'],
+    timelineTags: ['global-breakthrough', 'leadership-legacy'],
   },
 ]
 

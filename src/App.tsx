@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import './App.css'
 import { DetailPanel } from './components/DetailPanel'
 import { GraphMap } from './components/GraphMap'
-import { edges, gameDeepDive, kindLabels, nodes } from './data/gameData'
+import { edges, gameDeepDive, kindLabels, nodes, timelineEras, timelineEvents } from './data/gameData'
 import type { GraphControls, NodeKind } from './types/gameData'
 
 const defaultKinds = Object.keys(kindLabels) as NodeKind[]
@@ -11,23 +11,27 @@ function App() {
   const [selectedId, setSelectedId] = useState<string>('nintendo')
   const [searchTerm, setSearchTerm] = useState('')
   const [activeKinds, setActiveKinds] = useState<NodeKind[]>(defaultKinds)
+  const [activeEraId, setActiveEraId] = useState<string>(timelineEras[2].id)
   const [controls, setControls] = useState<GraphControls>({
     dimUnrelated: true,
     centerSelected: false,
   })
 
   const normalizedSearch = searchTerm.trim().toLowerCase()
+  const activeEra = timelineEras.find((era) => era.id === activeEraId) ?? timelineEras[0]
+  const activeEvents = timelineEvents.filter((event) => event.eraId === activeEra.id)
 
   const visibleNodes = useMemo(() => {
     return nodes.filter((node) => {
       const matchesKind = activeKinds.includes(node.kind)
+      const matchesEra = node.timelineTags.includes(activeEra.id)
       const haystack = [node.label, node.description, node.highlights.join(' '), node.era]
         .join(' ')
         .toLowerCase()
       const matchesSearch = normalizedSearch.length === 0 || haystack.includes(normalizedSearch)
-      return matchesKind && matchesSearch
+      return matchesKind && matchesEra && matchesSearch
     })
-  }, [activeKinds, normalizedSearch])
+  }, [activeKinds, activeEra.id, normalizedSearch])
 
   const visibleNodeIds = useMemo(() => new Set(visibleNodes.map((node) => node.id)), [visibleNodes])
 
@@ -43,8 +47,7 @@ function App() {
   )
 
   const visibleEdges = useMemo(
-    () =>
-      edges.filter((edge) => visibleNodeIds.has(edge.from) && visibleNodeIds.has(edge.to)),
+    () => edges.filter((edge) => visibleNodeIds.has(edge.from) && visibleNodeIds.has(edge.to)),
     [visibleNodeIds],
   )
 
@@ -69,9 +72,17 @@ function App() {
     })
   }
 
+  const focusEvent = (nodeId: string) => {
+    if (visibleNodeIds.has(nodeId)) {
+      setSelectedId(nodeId)
+      setControls((current) => ({ ...current, centerSelected: true }))
+    }
+  }
+
   const resetView = () => {
     setSearchTerm('')
     setActiveKinds(defaultKinds)
+    setActiveEraId(timelineEras[2].id)
     setSelectedId('nintendo')
     setControls({ dimUnrelated: true, centerSelected: false })
   }
@@ -83,9 +94,9 @@ function App() {
           <p className="eyebrow">Game Progression · MVP Pilot</p>
           <h1>Explore game history as a living network.</h1>
           <p className="hero-copy">
-            This first-pass pilot focuses on one curated ecosystem instead of trying to map the
-            whole industry at once. The goal is to prove the core experience: discover through a
-            readable graph, inspect context in a side panel, and drill deeper into selected games.
+            This pilot now combines a relationship graph with a timeline lens. Instead of showing
+            the entire ecosystem all at once, it lets you move through eras and inspect how the
+            network changes as studios, games, and people become historically relevant.
           </p>
           <div className="hero-actions">
             <a
@@ -96,7 +107,7 @@ function App() {
             >
               View GitHub repo
             </a>
-            <span className="action-pill subtle">Exploration pass: search + filters + focus</span>
+            <span className="action-pill subtle">Timeline pass: eras + milestones + graph sync</span>
           </div>
         </div>
 
@@ -107,11 +118,61 @@ function App() {
           </div>
           <div>
             <strong>Primary view</strong>
-            <span>Network map with contextual side panel</span>
+            <span>Network map with contextual side panel and timeline lens</span>
           </div>
           <div>
             <strong>Depth level</strong>
             <span>Metadata + editorial summaries + sample story breakdowns</span>
+          </div>
+        </div>
+      </section>
+
+      <section className="timeline-card">
+        <div className="section-heading">
+          <div>
+            <p className="eyebrow">Timeline mode</p>
+            <h2>Move through the ecosystem by era</h2>
+          </div>
+          <p className="muted">Select a period to change which nodes and milestones are emphasized.</p>
+        </div>
+
+        <div className="timeline-rail">
+          {timelineEras.map((era) => {
+            const active = era.id === activeEra.id
+            return (
+              <button
+                key={era.id}
+                type="button"
+                className={`timeline-stop ${active ? 'active' : ''}`}
+                onClick={() => setActiveEraId(era.id)}
+              >
+                <span className="timeline-stop-label">{era.label}</span>
+                <span className="timeline-stop-range">{era.range}</span>
+              </button>
+            )
+          })}
+        </div>
+
+        <div className="timeline-summary">
+          <div className="mini-card era-card">
+            <strong>{activeEra.label}</strong>
+            <span>{activeEra.range}</span>
+            <p>{activeEra.description}</p>
+          </div>
+
+          <div className="timeline-events">
+            {activeEvents.map((event) => (
+              <button
+                key={event.id}
+                type="button"
+                className="timeline-event"
+                onClick={() => focusEvent(event.relatedNodeIds[0])}
+              >
+                <span className="timeline-event-year">{event.yearLabel}</span>
+                <strong>{event.title}</strong>
+                <p>{event.summary}</p>
+              </button>
+            ))}
           </div>
         </div>
       </section>
@@ -123,7 +184,7 @@ function App() {
               <p className="eyebrow">Pilot experience</p>
               <h2>Neural-net style relationship map</h2>
             </div>
-            <p className="muted">Search, filter, and focus the graph instead of scanning everything at once.</p>
+            <p className="muted">Search, filter, focus, and now step through the history by era.</p>
           </div>
 
           <div className="control-stack">
@@ -215,6 +276,8 @@ function App() {
           totalCount={nodes.length}
           activeKinds={activeKinds}
           searchTerm={searchTerm}
+          activeEra={activeEra}
+          activeEvents={activeEvents}
           onSelect={setSelectedId}
         />
       </section>
@@ -230,30 +293,19 @@ function App() {
         <div className="decision-grid">
           <article>
             <h3>Scope</h3>
-            <p>
-              Start with a single ecosystem and 20–50 nodes, not the full global games industry.
-            </p>
+            <p>Start with a single ecosystem and 20–50 nodes, not the full global games industry.</p>
           </article>
           <article>
             <h3>Interaction model</h3>
-            <p>
-              Use the graph for discovery and a side panel for readability. Cool visuals should not
-              sabotage comprehension.
-            </p>
+            <p>Use the graph for discovery, the side panel for clarity, and the timeline for historical framing.</p>
           </article>
           <article>
             <h3>Content strategy</h3>
-            <p>
-              Combine factual metadata with curated summaries. Deep chapter-by-chapter story content
-              should be selective, not universal.
-            </p>
+            <p>Blend factual metadata with curated summaries and a small set of meaningful milestones.</p>
           </article>
           <article>
             <h3>Next build steps</h3>
-            <p>
-              From here, the strongest follow-up is timeline mode plus a richer content schema for
-              larger ecosystems.
-            </p>
+            <p>From here, the strongest follow-up is a richer content schema and larger ecosystem expansion.</p>
           </article>
         </div>
       </section>

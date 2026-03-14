@@ -7,6 +7,7 @@
 }
 
 .hero-panel,
+.timeline-card,
 .graph-card,
 .detail-card,
 .roadmap-card {
@@ -25,6 +26,13 @@
   align-items: start;
 }
 
+.timeline-card,
+.graph-card,
+.detail-card,
+.roadmap-card {
+  padding: 24px;
+}
+
 .eyebrow {
   margin: 0 0 10px;
   text-transform: uppercase;
@@ -40,7 +48,10 @@
 .detail-block li,
 .deep-dive-section li,
 .mini-card span,
-.control-label {
+.mini-card p,
+.control-label,
+.timeline-event p,
+.timeline-stop-range {
   color: #cbd5e1;
 }
 
@@ -95,21 +106,11 @@
 }
 
 .hero-stats strong,
-.mini-card strong {
+.mini-card strong,
+.timeline-event strong,
+.timeline-stop-label {
   color: #f8fafc;
   margin-bottom: 6px;
-}
-
-.content-grid {
-  display: grid;
-  grid-template-columns: 1.45fr 0.95fr;
-  gap: 24px;
-}
-
-.graph-card,
-.detail-card,
-.roadmap-card {
-  padding: 24px;
 }
 
 .section-heading {
@@ -122,6 +123,54 @@
 
 .section-heading.tight {
   align-items: start;
+}
+
+.timeline-rail {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.timeline-stop,
+.timeline-event {
+  border: 1px solid rgba(96, 165, 250, 0.18);
+  background: rgba(15, 23, 42, 0.72);
+  border-radius: 18px;
+  text-align: left;
+  padding: 16px;
+  color: inherit;
+  cursor: pointer;
+}
+
+.timeline-stop.active {
+  border-color: rgba(96, 165, 250, 0.45);
+  box-shadow: inset 0 0 0 1px rgba(96, 165, 250, 0.22);
+  background: linear-gradient(180deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.88));
+}
+
+.timeline-summary {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.timeline-events {
+  display: grid;
+  gap: 12px;
+}
+
+.timeline-event-year {
+  display: inline-flex;
+  margin-bottom: 8px;
+  color: #93c5fd;
+  font-size: 0.9rem;
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: 1.45fr 0.95fr;
+  gap: 24px;
 }
 
 .control-stack {
@@ -234,7 +283,6 @@
   width: 100%;
   height: 100%;
   min-height: 536px;
-  transition: view-box 0.25s ease;
 }
 
 .edge {
@@ -413,16 +461,18 @@
 
 @media (max-width: 1080px) {
   .hero-panel,
+  .timeline-summary,
   .content-grid {
     grid-template-columns: 1fr;
   }
 
-  .detail-card {
-    position: static;
-  }
-
+  .timeline-rail,
   .decision-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .detail-card {
+    position: static;
   }
 }
 
@@ -432,6 +482,7 @@
   }
 
   .hero-panel,
+  .timeline-card,
   .graph-card,
   .detail-card,
   .roadmap-card {
@@ -449,6 +500,7 @@
     align-items: start;
   }
 
+  .timeline-rail,
   .decision-grid {
     grid-template-columns: 1fr;
   }
