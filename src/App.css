@@ -263,6 +263,22 @@
   background: rgba(249, 115, 22, 0.2);
 }
 
+.filter-chip.franchise {
+  border-color: rgba(236, 72, 153, 0.35);
+}
+
+.filter-chip.franchise.active {
+  background: rgba(236, 72, 153, 0.2);
+}
+
+.filter-chip.platform {
+  border-color: rgba(234, 179, 8, 0.35);
+}
+
+.filter-chip.platform.active {
+  background: rgba(234, 179, 8, 0.2);
+}
+
 .toggle-pill input {
   accent-color: #60a5fa;
 }
@@ -345,6 +361,14 @@
   fill: #f97316;
 }
 
+.node.franchise {
+  fill: #ec4899;
+}
+
+.node.platform {
+  fill: #eab308;
+}
+
 .node-label {
   fill: #f8fafc;
   font-size: 2.2px;
@@ -395,6 +419,20 @@
   background: rgba(249, 115, 22, 0.16);
   border-color: rgba(249, 115, 22, 0.35);
   color: #fed7aa;
+}
+
+.legend-pill.franchise,
+.kind-badge.franchise {
+  background: rgba(236, 72, 153, 0.16);
+  border-color: rgba(236, 72, 153, 0.35);
+  color: #fbcfe8;
+}
+
+.legend-pill.platform,
+.kind-badge.platform {
+  background: rgba(234, 179, 8, 0.16);
+  border-color: rgba(234, 179, 8, 0.35);
+  color: #fef08a;
 }
 
 .era {

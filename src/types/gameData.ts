@@ -1,4 +1,4 @@
-export type NodeKind = 'studio' | 'publisher' | 'game' | 'person'
+export type NodeKind = 'studio' | 'publisher' | 'game' | 'person' | 'franchise' | 'platform'
 
 export type NodeRecord = {
   id: string
