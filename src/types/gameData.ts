@@ -21,3 +21,8 @@ export type DeepDiveSection = {
   title: string
   items: string[]
 }
+
+export type GraphControls = {
+  dimUnrelated: boolean
+  centerSelected: boolean
+}

@@ -1,27 +1,80 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import './App.css'
 import { DetailPanel } from './components/DetailPanel'
 import { GraphMap } from './components/GraphMap'
 import { edges, gameDeepDive, kindLabels, nodes } from './data/gameData'
+import type { GraphControls, NodeKind } from './types/gameData'
+
+const defaultKinds = Object.keys(kindLabels) as NodeKind[]
 
 function App() {
   const [selectedId, setSelectedId] = useState<string>('nintendo')
+  const [searchTerm, setSearchTerm] = useState('')
+  const [activeKinds, setActiveKinds] = useState<NodeKind[]>(defaultKinds)
+  const [controls, setControls] = useState<GraphControls>({
+    dimUnrelated: true,
+    centerSelected: false,
+  })
+
+  const normalizedSearch = searchTerm.trim().toLowerCase()
+
+  const visibleNodes = useMemo(() => {
+    return nodes.filter((node) => {
+      const matchesKind = activeKinds.includes(node.kind)
+      const haystack = [node.label, node.description, node.highlights.join(' '), node.era]
+        .join(' ')
+        .toLowerCase()
+      const matchesSearch = normalizedSearch.length === 0 || haystack.includes(normalizedSearch)
+      return matchesKind && matchesSearch
+    })
+  }, [activeKinds, normalizedSearch])
+
+  const visibleNodeIds = useMemo(() => new Set(visibleNodes.map((node) => node.id)), [visibleNodes])
+
+  useEffect(() => {
+    if (!visibleNodeIds.has(selectedId) && visibleNodes.length > 0) {
+      setSelectedId(visibleNodes[0].id)
+    }
+  }, [selectedId, visibleNodeIds, visibleNodes])
 
   const selectedNode = useMemo(
-    () => nodes.find((node) => node.id === selectedId) ?? nodes[0],
-    [selectedId],
+    () => visibleNodes.find((node) => node.id === selectedId) ?? visibleNodes[0] ?? nodes[0],
+    [selectedId, visibleNodes],
   )
 
-  const connectedEdges = edges.filter(
-    (edge) => edge.from === selectedId || edge.to === selectedId,
+  const visibleEdges = useMemo(
+    () =>
+      edges.filter((edge) => visibleNodeIds.has(edge.from) && visibleNodeIds.has(edge.to)),
+    [visibleNodeIds],
+  )
+
+  const connectedEdges = visibleEdges.filter(
+    (edge) => edge.from === selectedNode.id || edge.to === selectedNode.id,
   )
 
   const connectedNodeIds = new Set(
-    connectedEdges.flatMap((edge) => [edge.from, edge.to]).filter((id) => id !== selectedId),
+    connectedEdges.flatMap((edge) => [edge.from, edge.to]).filter((id) => id !== selectedNode.id),
   )
 
-  const connectedNodes = nodes.filter((node) => connectedNodeIds.has(node.id))
+  const connectedNodes = visibleNodes.filter((node) => connectedNodeIds.has(node.id))
   const deepDive = gameDeepDive[selectedNode.id]
+
+  const toggleKind = (kind: NodeKind) => {
+    setActiveKinds((currentKinds) => {
+      if (currentKinds.includes(kind)) {
+        return currentKinds.length === 1 ? currentKinds : currentKinds.filter((item) => item !== kind)
+      }
+
+      return [...currentKinds, kind]
+    })
+  }
+
+  const resetView = () => {
+    setSearchTerm('')
+    setActiveKinds(defaultKinds)
+    setSelectedId('nintendo')
+    setControls({ dimUnrelated: true, centerSelected: false })
+  }
 
   return (
     <main className="app-shell">
@@ -35,10 +88,15 @@ function App() {
             readable graph, inspect context in a side panel, and drill deeper into selected games.
           </p>
           <div className="hero-actions">
-            <a className="action-pill primary" href="https://github.com/gusicclaw-bot/game-progression" target="_blank" rel="noreferrer">
+            <a
+              className="action-pill primary"
+              href="https://github.com/gusicclaw-bot/game-progression"
+              target="_blank"
+              rel="noreferrer"
+            >
               View GitHub repo
             </a>
-            <span className="action-pill subtle">Mac-friendly first pass</span>
+            <span className="action-pill subtle">Exploration pass: search + filters + focus</span>
           </div>
         </div>
 
@@ -65,14 +123,77 @@ function App() {
               <p className="eyebrow">Pilot experience</p>
               <h2>Neural-net style relationship map</h2>
             </div>
-            <p className="muted">Click any node to inspect how the industry connects.</p>
+            <p className="muted">Search, filter, and focus the graph instead of scanning everything at once.</p>
+          </div>
+
+          <div className="control-stack">
+            <label className="search-input-wrap">
+              <span className="control-label">Search nodes</span>
+              <input
+                className="search-input"
+                type="search"
+                placeholder="Try Nintendo, Pokémon, Kirby, Iwata..."
+                value={searchTerm}
+                onChange={(event) => setSearchTerm(event.target.value)}
+              />
+            </label>
+
+            <div className="control-group">
+              <span className="control-label">Filter by type</span>
+              <div className="chip-row">
+                {defaultKinds.map((kind) => {
+                  const active = activeKinds.includes(kind)
+                  return (
+                    <button
+                      key={kind}
+                      type="button"
+                      className={`filter-chip ${active ? 'active' : ''} ${kind}`}
+                      onClick={() => toggleKind(kind)}
+                    >
+                      {kindLabels[kind]}
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+
+            <div className="control-group">
+              <span className="control-label">Graph behavior</span>
+              <div className="toggle-row">
+                <label className="toggle-pill">
+                  <input
+                    type="checkbox"
+                    checked={controls.dimUnrelated}
+                    onChange={(event) =>
+                      setControls((current) => ({ ...current, dimUnrelated: event.target.checked }))
+                    }
+                  />
+                  <span>Dim unrelated nodes</span>
+                </label>
+                <label className="toggle-pill">
+                  <input
+                    type="checkbox"
+                    checked={controls.centerSelected}
+                    onChange={(event) =>
+                      setControls((current) => ({ ...current, centerSelected: event.target.checked }))
+                    }
+                  />
+                  <span>Center selected node</span>
+                </label>
+                <button type="button" className="action-pill subtle button-pill" onClick={resetView}>
+                  Reset view
+                </button>
+              </div>
+            </div>
           </div>
 
           <GraphMap
             nodes={nodes}
             edges={edges}
-            selectedId={selectedId}
+            selectedId={selectedNode.id}
             connectedNodeIds={connectedNodeIds}
+            visibleNodeIds={visibleNodeIds}
+            controls={controls}
             onSelect={setSelectedId}
           />
 
@@ -90,6 +211,10 @@ function App() {
           kindLabels={kindLabels}
           connectedNodes={connectedNodes}
           deepDive={deepDive}
+          visibleCount={visibleNodes.length}
+          totalCount={nodes.length}
+          activeKinds={activeKinds}
+          searchTerm={searchTerm}
           onSelect={setSelectedId}
         />
       </section>
@@ -126,8 +251,8 @@ function App() {
           <article>
             <h3>Next build steps</h3>
             <p>
-              Add search, filters, timeline mode, and a real content schema/API once the interaction
-              pattern feels right.
+              From here, the strongest follow-up is timeline mode plus a richer content schema for
+              larger ecosystems.
             </p>
           </article>
         </div>

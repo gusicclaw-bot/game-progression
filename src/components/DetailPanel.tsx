@@ -5,10 +5,24 @@ type DetailPanelProps = {
   kindLabels: Record<NodeKind, string>
   connectedNodes: NodeRecord[]
   deepDive?: { sections: DeepDiveSection[] }
+  visibleCount: number
+  totalCount: number
+  activeKinds: string[]
+  searchTerm: string
   onSelect: (id: string) => void
 }
 
-export function DetailPanel({ node, kindLabels, connectedNodes, deepDive, onSelect }: DetailPanelProps) {
+export function DetailPanel({
+  node,
+  kindLabels,
+  connectedNodes,
+  deepDive,
+  visibleCount,
+  totalCount,
+  activeKinds,
+  searchTerm,
+  onSelect,
+}: DetailPanelProps) {
   return (
     <aside className="detail-card">
       <div className="section-heading tight">
@@ -19,8 +33,29 @@ export function DetailPanel({ node, kindLabels, connectedNodes, deepDive, onSele
         <span className={`kind-badge ${node.kind}`}>{kindLabels[node.kind]}</span>
       </div>
 
+      <div className="mini-stats-row">
+        <div className="mini-card">
+          <strong>{visibleCount}</strong>
+          <span>Visible nodes</span>
+        </div>
+        <div className="mini-card">
+          <strong>{totalCount}</strong>
+          <span>Total pilot nodes</span>
+        </div>
+      </div>
+
       <p className="era">{node.era}</p>
       <p className="detail-copy">{node.description}</p>
+
+      <div className="detail-block">
+        <h3>Current view</h3>
+        <ul>
+          <li>
+            Active filters: {activeKinds.map((kind) => kindLabels[kind as NodeKind]).join(', ')}
+          </li>
+          <li>Search: {searchTerm ? `“${searchTerm}”` : 'none'}</li>
+        </ul>
+      </div>
 
       <div className="detail-block">
         <h3>Highlights</h3>
@@ -34,13 +69,17 @@ export function DetailPanel({ node, kindLabels, connectedNodes, deepDive, onSele
       <div className="detail-block">
         <h3>Connected nodes</h3>
         <ul>
-          {connectedNodes.map((connectedNode) => (
-            <li key={connectedNode.id}>
-              <button className="text-button" onClick={() => onSelect(connectedNode.id)}>
-                {connectedNode.label}
-              </button>
-            </li>
-          ))}
+          {connectedNodes.length > 0 ? (
+            connectedNodes.map((connectedNode) => (
+              <li key={connectedNode.id}>
+                <button className="text-button" onClick={() => onSelect(connectedNode.id)}>
+                  {connectedNode.label}
+                </button>
+              </li>
+            ))
+          ) : (
+            <li>No visible connected nodes under the current filters.</li>
+          )}
         </ul>
       </div>
 
