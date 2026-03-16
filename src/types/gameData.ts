@@ -10,6 +10,7 @@ export type NodeRecord = {
   description: string
   highlights: string[]
   timelineTags: string[]
+  importance?: number
 }
 
 export type EdgeRecord = {

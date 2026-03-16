@@ -96,9 +96,9 @@ function App() {
           <p className="eyebrow">Game Progression · MVP Pilot</p>
           <h1>Explore game history as a living network.</h1>
           <p className="hero-copy">
-            This pilot combines a relationship graph with a timeline lens. Instead of showing the
-            entire ecosystem all at once, it lets you move through eras and inspect how studios,
-            games, people, franchises, and platforms become historically relevant.
+            Explore Nintendo's ecosystem as a living knowledge graph. Studios, people, games,
+            franchises, and platforms — connected by relationships, framed by timeline eras,
+            and enriched with editorial deep dives.
           </p>
           <div className="hero-actions">
             <a
@@ -109,7 +109,7 @@ function App() {
             >
               View GitHub repo
             </a>
-            <span className="action-pill subtle">Expanded pilot: 15 nodes · 26 relationships</span>
+            <span className="action-pill subtle">Expanded pilot · richer graph focus</span>
           </div>
         </div>
 
@@ -184,9 +184,9 @@ function App() {
           <div className="section-heading">
             <div>
               <p className="eyebrow">Pilot experience</p>
-              <h2>Neural-net style relationship map</h2>
+              <h2>Interactive knowledge graph</h2>
             </div>
-            <p className="muted">15 nodes, 26 relationships, search/filter controls, and era-based timeline focus.</p>
+            <p className="muted">15 nodes · 26 relationships · search, filter, focus, and timeline context.</p>
           </div>
 
           <div className="control-stack">

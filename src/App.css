@@ -378,11 +378,23 @@
   fill: #eab308;
 }
 
+.node.hovered {
+  filter: drop-shadow(0 0 6px rgba(96, 165, 250, 0.6));
+  stroke: #93c5fd;
+  stroke-width: 0.5;
+}
+
 .node-label {
   fill: #f8fafc;
-  font-size: 2.2px;
+  font-size: 2px;
   text-anchor: middle;
   pointer-events: none;
+}
+
+.node-label.selected {
+  fill: #ffffff;
+  font-size: 2.6px;
+  font-weight: 700;
 }
 
 .legend-row {

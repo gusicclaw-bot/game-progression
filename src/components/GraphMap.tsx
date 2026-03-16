@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import type { EdgeRecord, GraphControls, NodeRecord } from '../types/gameData'
 
 type GraphMapProps = {
@@ -10,6 +11,25 @@ type GraphMapProps = {
   onSelect: (id: string) => void
 }
 
+function nodeRadius(node: NodeRecord, isSelected: boolean): number {
+  const importance = node.importance ?? 5
+  const base = 1.8 + importance * 0.32
+  return isSelected ? base * 1.35 : base
+}
+
+function shouldShowLabel(
+  node: NodeRecord,
+  isSelected: boolean,
+  isConnected: boolean,
+  visibleCount: number,
+): boolean {
+  if (isSelected || isConnected) return true
+  const importance = node.importance ?? 5
+  if (visibleCount <= 15) return true
+  if (visibleCount <= 25) return importance >= 5
+  return importance >= 7
+}
+
 export function GraphMap({
   nodes,
   edges,
@@ -19,10 +39,13 @@ export function GraphMap({
   controls,
   onSelect,
 }: GraphMapProps) {
+  const [hoveredId, setHoveredId] = useState<string | null>(null)
   const selectedNode = nodes.find((node) => node.id === selectedId)
-  const viewBox = selectedNode && controls.centerSelected
-    ? `${selectedNode.x - 24} ${selectedNode.y - 18} 48 36`
-    : '0 0 100 60'
+  const visibleCount = nodes.filter((node) => visibleNodeIds.has(node.id)).length
+  const viewBox =
+    selectedNode && controls.centerSelected
+      ? `${selectedNode.x - 28} ${selectedNode.y - 21} 56 42`
+      : '0 0 100 60'
 
   return (
     <div className="graph-stage">
@@ -35,7 +58,11 @@ export function GraphMap({
           const isVisible = visibleNodeIds.has(edge.from) && visibleNodeIds.has(edge.to)
           if (!isVisible) return null
 
-          const isActive = edge.from === selectedId || edge.to === selectedId
+          const isActive =
+            edge.from === selectedId ||
+            edge.to === selectedId ||
+            edge.from === hoveredId ||
+            edge.to === hoveredId
           const isDimmed = controls.dimUnrelated && !isActive
 
           return (
@@ -47,13 +74,15 @@ export function GraphMap({
                 y2={to.y}
                 className={`edge ${isActive ? 'active' : ''} ${isDimmed ? 'dimmed' : ''}`}
               />
-              <text
-                x={(from.x + to.x) / 2}
-                y={(from.y + to.y) / 2 - 1.2}
-                className={`edge-label ${isActive ? 'active' : ''} ${isDimmed ? 'dimmed' : ''}`}
-              >
-                {edge.label}
-              </text>
+              {isActive ? (
+                <text
+                  x={(from.x + to.x) / 2}
+                  y={(from.y + to.y) / 2 - 1.2}
+                  className="edge-label active"
+                >
+                  {edge.label}
+                </text>
+              ) : null}
             </g>
           )
         })}
@@ -63,20 +92,34 @@ export function GraphMap({
 
           const isSelected = node.id === selectedId
           const isConnected = connectedNodeIds.has(node.id)
+          const isHovered = node.id === hoveredId
           const isDimmed = controls.dimUnrelated && !isSelected && !isConnected
+          const r = nodeRadius(node, isSelected)
+          const showLabel = isHovered || shouldShowLabel(node, isSelected, isConnected, visibleCount)
 
           return (
-            <g key={node.id}>
+            <g
+              key={node.id}
+              onMouseEnter={() => setHoveredId(node.id)}
+              onMouseLeave={() => setHoveredId((prev) => (prev === node.id ? null : prev))}
+            >
               <circle
                 cx={node.x}
                 cy={node.y}
-                r={isSelected ? 4.4 : 3.3}
-                className={`node ${node.kind} ${isSelected ? 'selected' : ''} ${isConnected ? 'connected' : ''} ${isDimmed ? 'dimmed' : ''}`}
+                r={r}
+                className={`node ${node.kind} ${isSelected ? 'selected' : ''} ${isConnected ? 'connected' : ''} ${isDimmed ? 'dimmed' : ''} ${isHovered ? 'hovered' : ''}`}
                 onClick={() => onSelect(node.id)}
+                style={{ cursor: 'pointer' }}
               />
-              <text x={node.x} y={node.y + 7} className={`node-label ${isDimmed ? 'dimmed' : ''}`}>
-                {node.label}
-              </text>
+              {showLabel ? (
+                <text
+                  x={node.x}
+                  y={node.y + r + 1.5}
+                  className={`node-label ${isDimmed ? 'dimmed' : ''} ${isSelected ? 'selected' : ''}`}
+                >
+                  {node.label}
+                </text>
+              ) : null}
             </g>
           )
         })}
