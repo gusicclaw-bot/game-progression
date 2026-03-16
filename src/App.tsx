@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import './App.css'
+import gameLogo from './assets/game-progression-logo.jpg'
 import { DetailPanel } from './components/DetailPanel'
 import { GraphMap } from './components/GraphMap'
 import { edges, gameDeepDive, kindLabels, nodes, timelineEras, timelineEvents } from './data/gameData'
@@ -90,6 +91,7 @@ function App() {
   return (
     <main className="app-shell">
       <section className="hero-panel">
+        <img src={gameLogo} alt="Game Progression" className="hero-logo" />
         <div>
           <p className="eyebrow">Game Progression · MVP Pilot</p>
           <h1>Explore game history as a living network.</h1>

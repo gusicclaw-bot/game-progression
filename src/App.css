@@ -26,6 +26,15 @@
   align-items: start;
 }
 
+.hero-logo {
+  grid-column: 1 / -1;
+  width: 100%;
+  max-height: 320px;
+  object-fit: contain;
+  border-radius: 12px;
+  margin-bottom: 4px;
+}
+
 .timeline-card,
 .graph-card,
 .detail-card,
