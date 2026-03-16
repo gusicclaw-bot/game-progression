@@ -96,9 +96,9 @@ function App() {
           <p className="eyebrow">Game Progression · MVP Pilot</p>
           <h1>Explore game history as a living network.</h1>
           <p className="hero-copy">
-            This pilot now combines a relationship graph with a timeline lens. Instead of showing
-            the entire ecosystem all at once, it lets you move through eras and inspect how the
-            network changes as studios, games, and people become historically relevant.
+            This pilot combines a relationship graph with a timeline lens. Instead of showing the
+            entire ecosystem all at once, it lets you move through eras and inspect how studios,
+            games, people, franchises, and platforms become historically relevant.
           </p>
           <div className="hero-actions">
             <a
@@ -109,7 +109,7 @@ function App() {
             >
               View GitHub repo
             </a>
-            <span className="action-pill subtle">Timeline pass: eras + milestones + graph sync</span>
+            <span className="action-pill subtle">Expanded pilot: 15 nodes · 26 relationships</span>
           </div>
         </div>
 
@@ -186,7 +186,7 @@ function App() {
               <p className="eyebrow">Pilot experience</p>
               <h2>Neural-net style relationship map</h2>
             </div>
-            <p className="muted">Search, filter, focus, and now step through the history by era.</p>
+            <p className="muted">15 nodes, 26 relationships, search/filter controls, and era-based timeline focus.</p>
           </div>
 
           <div className="control-stack">
@@ -307,7 +307,7 @@ function App() {
           </article>
           <article>
             <h3>Next build steps</h3>
-            <p>From here, the strongest follow-up is a richer content schema and larger ecosystem expansion.</p>
+            <p>From here, the strongest follow-up is adding another compact cluster — like Metroid, Monolith Soft, or Intelligent Systems — without changing the architecture yet.</p>
           </article>
         </div>
       </section>

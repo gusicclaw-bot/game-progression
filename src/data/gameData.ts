@@ -64,8 +64,16 @@ export const timelineEvents: TimelineEvent[] = [
     eraId: 'global-breakthrough',
     yearLabel: '1990s',
     title: 'Game Boy becomes a defining handheld platform',
-    summary: 'Portable hardware gives Pokémon the perfect commercial and social environment to explode.',
-    relatedNodeIds: ['game-boy', 'nintendo', 'pokemon-red-blue'],
+    summary: 'Portable hardware gives Pokémon and Kirby a perfect commercial and social environment to spread.',
+    relatedNodeIds: ['game-boy', 'nintendo', 'pokemon-red-blue', 'kirbys-dream-land'],
+  },
+  {
+    id: 'kirby-debut',
+    eraId: 'global-breakthrough',
+    yearLabel: '1992',
+    title: 'Kirby’s Dream Land introduces Kirby on Game Boy',
+    summary: 'Kirby establishes itself as a Nintendo character franchise through a small, elegant handheld debut.',
+    relatedNodeIds: ['kirbys-dream-land', 'kirby-franchise', 'game-boy'],
   },
   {
     id: 'pokemon-launch',
@@ -84,12 +92,28 @@ export const timelineEvents: TimelineEvent[] = [
     relatedNodeIds: ['kirby-super-star', 'kirby-franchise', 'snes'],
   },
   {
+    id: 'pokemon-yellow',
+    eraId: 'global-breakthrough',
+    yearLabel: '1998',
+    title: 'Pokémon Yellow broadens the franchise bridge to anime-era popularity',
+    summary: 'An iteration on the original formula demonstrates how fast the Pokémon branch evolves once the brand catches fire.',
+    relatedNodeIds: ['pokemon-yellow', 'pokemon-franchise', 'game-boy'],
+  },
+  {
     id: 'iwata-leadership',
     eraId: 'leadership-legacy',
     yearLabel: '2002',
     title: 'Satoru Iwata becomes Nintendo president',
     summary: 'A human node links technical craft, studio leadership, and executive stewardship.',
     relatedNodeIds: ['satoru-iwata', 'nintendo', 'hal'],
+  },
+  {
+    id: 'retro-acquisition',
+    eraId: 'leadership-legacy',
+    yearLabel: '2002',
+    title: 'Retro Studios becomes a first-party Nintendo studio',
+    summary: 'The ecosystem expands beyond Japan through ownership, showing another path by which Nintendo curates its network.',
+    relatedNodeIds: ['retro-studios', 'nintendo'],
   },
 ]
 
@@ -112,7 +136,7 @@ export const nodes: NodeRecord[] = [
     kind: 'studio',
     era: '1989 → now',
     x: 40,
-    y: 16,
+    y: 15,
     description:
       'Independent studio best known for developing the core Pokémon RPG line while collaborating closely with Nintendo.',
     highlights: ['Japan', 'RPG', 'Long-term partner'],
@@ -131,6 +155,30 @@ export const nodes: NodeRecord[] = [
     timelineTags: ['studio-foundations', 'global-breakthrough', 'leadership-legacy'],
   },
   {
+    id: 'creatures',
+    label: 'Creatures Inc.',
+    kind: 'studio',
+    era: '1995 → now',
+    x: 50,
+    y: 8,
+    description:
+      'A Pokémon-adjacent studio and production partner that helps show the franchise as a multi-company ecosystem instead of a single-studio story.',
+    highlights: ['Pokémon production', 'Brand support', 'Collaborative structure'],
+    timelineTags: ['global-breakthrough', 'leadership-legacy'],
+  },
+  {
+    id: 'retro-studios',
+    label: 'Retro Studios',
+    kind: 'studio',
+    era: '1998 → now',
+    x: 30,
+    y: 54,
+    description:
+      'A first-party Nintendo studio in North America, included here to hint at the broader global shape of the ecosystem beyond the initial Japan-centered cluster.',
+    highlights: ['First-party studio', 'North America', 'Nintendo ownership'],
+    timelineTags: ['leadership-legacy'],
+  },
+  {
     id: 'satoru-iwata',
     label: 'Satoru Iwata',
     kind: 'person',
@@ -141,6 +189,18 @@ export const nodes: NodeRecord[] = [
       'A key human connection node showing how people tie together studios, leadership, and game history.',
     highlights: ['Programmer', 'HAL leadership', 'Nintendo leadership'],
     timelineTags: ['studio-foundations', 'leadership-legacy'],
+  },
+  {
+    id: 'masahiro-sakurai',
+    label: 'Masahiro Sakurai',
+    kind: 'person',
+    era: '1970 → now',
+    x: 57,
+    y: 50,
+    description:
+      'A creator node that helps explain how Kirby gained an identity early, and how individual designers give shape to a franchise branch.',
+    highlights: ['Kirby creator', 'Director', 'Design leadership'],
+    timelineTags: ['global-breakthrough', 'leadership-legacy'],
   },
   {
     id: 'pokemon-red-blue',
@@ -155,12 +215,36 @@ export const nodes: NodeRecord[] = [
     timelineTags: ['global-breakthrough', 'leadership-legacy'],
   },
   {
+    id: 'pokemon-yellow',
+    label: 'Pokémon Yellow',
+    kind: 'game',
+    era: '1998 / 1999',
+    x: 77,
+    y: 6,
+    description:
+      'A refinement of the original Pokémon formula that reflects the franchise’s rapid consolidation into a broader cultural brand.',
+    highlights: ['Anime influence', 'Pikachu focus', 'Iterative sequel'],
+    timelineTags: ['global-breakthrough', 'leadership-legacy'],
+  },
+  {
+    id: 'kirbys-dream-land',
+    label: 'Kirby’s Dream Land',
+    kind: 'game',
+    era: '1992',
+    x: 72,
+    y: 56,
+    description:
+      'Kirby’s handheld debut is useful in the pilot because it shows how a franchise can start with a compact, elegant game and later branch outward.',
+    highlights: ['Game Boy', 'Franchise debut', 'Accessible design'],
+    timelineTags: ['global-breakthrough', 'leadership-legacy'],
+  },
+  {
     id: 'kirby-super-star',
     label: 'Kirby Super Star',
     kind: 'game',
     era: '1996',
-    x: 72,
-    y: 46,
+    x: 78,
+    y: 45,
     description:
       'Used as a second example game to show how the graph can compare franchises, teams, release eras, and hardware context.',
     highlights: ['SNES', 'Platformer', 'Multi-scenario structure'],
@@ -171,8 +255,8 @@ export const nodes: NodeRecord[] = [
     label: 'Pokémon',
     kind: 'franchise',
     era: '1996 → now',
-    x: 86,
-    y: 21,
+    x: 90,
+    y: 17,
     description:
       'A franchise node showing how one breakout game becomes an enduring brand spanning sequels, media, and long-term platform strategy.',
     highlights: ['Franchise', 'Brand expansion', 'Cross-media reach'],
@@ -183,8 +267,8 @@ export const nodes: NodeRecord[] = [
     label: 'Kirby',
     kind: 'franchise',
     era: '1992 → now',
-    x: 86,
-    y: 52,
+    x: 89,
+    y: 50,
     description:
       'A franchise node for tracing how HAL and Nintendo sustain a character line across multiple design eras.',
     highlights: ['Character franchise', 'Nintendo ecosystem', 'Long-running series'],
@@ -198,7 +282,7 @@ export const nodes: NodeRecord[] = [
     x: 61,
     y: 7,
     description:
-      'Portable Nintendo hardware that provided the social and technical context for early Pokémon’s explosive reach.',
+      'Portable Nintendo hardware that provided the social and technical context for early Pokémon and Kirby’s first breakthrough.',
     highlights: ['Handheld', 'Portable link play', 'Mass-market reach'],
     timelineTags: ['studio-foundations', 'global-breakthrough', 'leadership-legacy'],
   },
@@ -207,8 +291,8 @@ export const nodes: NodeRecord[] = [
     label: 'Super Nintendo',
     kind: 'platform',
     era: '1990 → 2003',
-    x: 60,
-    y: 55,
+    x: 61,
+    y: 54,
     description:
       'A platform node that helps explain Kirby Super Star’s presentation, structure, and place in Nintendo’s 1990s output.',
     highlights: ['16-bit era', 'Nintendo home console', 'Franchise showcase'],
@@ -219,18 +303,30 @@ export const nodes: NodeRecord[] = [
 export const edges: EdgeRecord[] = [
   { from: 'nintendo', to: 'game-freak', label: 'publishes / partners with' },
   { from: 'nintendo', to: 'hal', label: 'publishes / collaborates with' },
+  { from: 'nintendo', to: 'creatures', label: 'publishes / collaborates with' },
+  { from: 'nintendo', to: 'retro-studios', label: 'owns first-party studio' },
   { from: 'nintendo', to: 'game-boy', label: 'platform holder' },
   { from: 'nintendo', to: 'snes', label: 'platform holder' },
   { from: 'nintendo', to: 'pokemon-franchise', label: 'brand steward / publisher' },
   { from: 'nintendo', to: 'kirby-franchise', label: 'brand steward / publisher' },
   { from: 'game-freak', to: 'pokemon-red-blue', label: 'developed' },
+  { from: 'game-freak', to: 'pokemon-yellow', label: 'developed' },
+  { from: 'creatures', to: 'pokemon-franchise', label: 'supports franchise ecosystem' },
+  { from: 'creatures', to: 'pokemon-yellow', label: 'production partner' },
+  { from: 'hal', to: 'kirbys-dream-land', label: 'developed' },
   { from: 'hal', to: 'kirby-super-star', label: 'developed' },
   { from: 'pokemon-red-blue', to: 'pokemon-franchise', label: 'belongs to franchise' },
+  { from: 'pokemon-yellow', to: 'pokemon-franchise', label: 'belongs to franchise' },
+  { from: 'kirbys-dream-land', to: 'kirby-franchise', label: 'belongs to franchise' },
   { from: 'kirby-super-star', to: 'kirby-franchise', label: 'belongs to franchise' },
   { from: 'pokemon-red-blue', to: 'game-boy', label: 'released on platform' },
+  { from: 'pokemon-yellow', to: 'game-boy', label: 'released on platform' },
+  { from: 'kirbys-dream-land', to: 'game-boy', label: 'released on platform' },
   { from: 'kirby-super-star', to: 'snes', label: 'released on platform' },
   { from: 'satoru-iwata', to: 'hal', label: 'former president' },
   { from: 'satoru-iwata', to: 'nintendo', label: 'later president' },
+  { from: 'masahiro-sakurai', to: 'hal', label: 'early creative leader' },
+  { from: 'masahiro-sakurai', to: 'kirby-franchise', label: 'helped define early identity' },
 ]
 
 export const kindLabels: Record<NodeKind, string> = {
@@ -263,6 +359,52 @@ export const gameDeepDive: Record<string, { sections: DeepDiveSection[] }> = {
         items: [
           'Defined monster-collection RPG design for decades',
           'Spawned one of the biggest multimedia franchises in the world',
+        ],
+      },
+    ],
+  },
+  'pokemon-yellow': {
+    sections: [
+      {
+        title: 'Story progression',
+        items: [
+          'Revisits Kanto with Pikachu as the player’s visible starter companion',
+          'Rebalances the early-game rhythm around familiarity and iteration',
+          'Extends the original arc into a more brand-aware version of the same journey',
+        ],
+      },
+      {
+        title: 'Key characters',
+        items: ['Pikachu', 'Jessie and James inspirations', 'Professor Oak', 'Blue / rival'],
+      },
+      {
+        title: 'Accolades / legacy',
+        items: [
+          'Shows how quickly Pokémon adapted itself into a wider franchise machine',
+          'Bridges the games more directly to anime-era popularity and character branding',
+        ],
+      },
+    ],
+  },
+  'kirbys-dream-land': {
+    sections: [
+      {
+        title: 'Story progression',
+        items: [
+          'Kirby sets out to restore Dream Land after King Dedede steals food from its citizens',
+          'Compact stage structure keeps the debut readable, fast, and approachable',
+          'The final confrontation establishes Kirby’s tone as playful rather than grim',
+        ],
+      },
+      {
+        title: 'Key characters',
+        items: ['Kirby', 'King Dedede', 'Whispy Woods', 'Kracko'],
+      },
+      {
+        title: 'Accolades / legacy',
+        items: [
+          'Introduced one of Nintendo’s most durable character franchises',
+          'A strong example of how elegant handheld design can launch a long-running series',
         ],
       },
     ],
