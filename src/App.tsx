@@ -17,6 +17,7 @@ function App() {
     dimUnrelated: true,
     centerSelected: false,
   })
+  const [graphResetToken, setGraphResetToken] = useState(0)
 
   const normalizedSearch = searchTerm.trim().toLowerCase()
   const activeEra = timelineEras.find((era) => era.id === activeEraId) ?? timelineEras[0]
@@ -86,6 +87,7 @@ function App() {
     setActiveEraId(timelineEras[2].id)
     setSelectedId('nintendo')
     setControls({ dimUnrelated: true, centerSelected: false })
+    setGraphResetToken((current) => current + 1)
   }
 
   return (
@@ -257,6 +259,7 @@ function App() {
             connectedNodeIds={connectedNodeIds}
             visibleNodeIds={visibleNodeIds}
             controls={controls}
+            resetToken={graphResetToken}
             onSelect={setSelectedId}
           />
 

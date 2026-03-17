@@ -8,6 +8,7 @@ type GraphMapProps = {
   connectedNodeIds: Set<string>
   visibleNodeIds: Set<string>
   controls: GraphControls
+  resetToken: number
   onSelect: (id: string) => void
 }
 
