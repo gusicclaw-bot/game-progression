@@ -179,6 +179,22 @@ export const timelineEvents: TimelineEvent[] = [
     summary: 'A later Zelda landmark shows how Nintendo translated one of its foundational series into the 3D era with lasting design influence.',
     relatedNodeIds: ['ocarina-of-time', 'zelda-franchise', 'nintendo-64'],
   },
+  {
+    id: 'rare-strengthens-nintendo-lineup',
+    eraId: 'global-breakthrough',
+    yearLabel: '1994',
+    title: 'Rare strengthens Nintendo’s 1990s software lineup',
+    summary: 'Rare gives the graph a major external creative branch, showing how Nintendo’s ecosystem also relied on standout partner studios during the 16-bit era.',
+    relatedNodeIds: ['rare', 'nintendo', 'donkey-kong-country'],
+  },
+  {
+    id: 'donkey-kong-country-reframes-the-series',
+    eraId: 'global-breakthrough',
+    yearLabel: '1994',
+    title: 'Donkey Kong Country redefines a legacy character line on SNES',
+    summary: 'The Donkey Kong branch helps show Nintendo refreshing an older character lineage through partner-studio craft, technical presentation, and a more modern platforming identity.',
+    relatedNodeIds: ['donkey-kong-country', 'donkey-kong-franchise', 'snes', 'rare'],
+  },
 ]
 
 export const nodes: NodeRecord[] = [
@@ -566,6 +582,42 @@ export const nodes: NodeRecord[] = [
     highlights: ['Fifth generation', 'Nintendo home console', '3D transition era'],
     timelineTags: ['global-breakthrough', 'leadership-legacy'],
   },
+  {
+    id: 'rare',
+    label: 'Rare',
+    kind: 'studio',
+    era: '1985 → now',
+    x: 31,
+    y: 62,
+    description:
+      'A partner-studio node that helps broaden the graph beyond Nintendo’s internal and Japan-based lineages, showing how outside teams also played a major role in defining flagship eras.',
+    highlights: ['UK studio', 'Nintendo partner era', 'Technical showcase work'],
+    timelineTags: ['global-breakthrough', 'leadership-legacy'],
+  },
+  {
+    id: 'donkey-kong-country',
+    label: 'Donkey Kong Country',
+    kind: 'game',
+    era: '1994',
+    x: 73,
+    y: 60,
+    description:
+      'A major SNES-era platformer that helps the graph show how Nintendo refreshed an older character line through Rare’s presentation, pacing, and technical flair.',
+    highlights: ['SNES', 'Platformer', 'Pre-rendered visual identity'],
+    timelineTags: ['global-breakthrough'],
+  },
+  {
+    id: 'donkey-kong-franchise',
+    label: 'Donkey Kong',
+    kind: 'franchise',
+    era: '1981 → now',
+    x: 89,
+    y: 60,
+    description:
+      'A franchise node that helps the pilot represent one of Nintendo’s oldest character lines, while also showing how legacy brands can be reinterpreted by different teams across hardware eras.',
+    highlights: ['Legacy Nintendo character line', 'Platforming branch', 'Long-running franchise'],
+    timelineTags: ['origins', 'global-breakthrough', 'leadership-legacy'],
+  },
 ]
 
 export const edges: EdgeRecord[] = [
@@ -627,6 +679,13 @@ export const edges: EdgeRecord[] = [
   { from: 'ocarina-of-time', to: 'zelda-franchise', label: 'belongs to franchise' },
   { from: 'ocarina-of-time', to: 'nintendo-64', label: 'released on platform' },
   { from: 'zelda-franchise', to: 'nintendo-64', label: 'reaches 3D landmark on platform' },
+  { from: 'nintendo', to: 'rare', label: 'publishes / partners with' },
+  { from: 'nintendo', to: 'donkey-kong-franchise', label: 'brand steward / publisher' },
+  { from: 'rare', to: 'donkey-kong-country', label: 'developed' },
+  { from: 'rare', to: 'donkey-kong-franchise', label: 'helped redefine 1990s identity' },
+  { from: 'donkey-kong-country', to: 'donkey-kong-franchise', label: 'belongs to franchise' },
+  { from: 'donkey-kong-country', to: 'snes', label: 'released on platform' },
+  { from: 'donkey-kong-franchise', to: 'snes', label: 'finds 16-bit reinvention on platform' },
 ]
 
 export const kindLabels: Record<NodeKind, string> = {
@@ -825,6 +884,30 @@ export const gameDeepDive: Record<string, { sections: DeepDiveSection[] }> = {
         items: [
           'Frequently treated as one of Nintendo’s most influential 3D design landmarks',
           'Useful in the pilot as a bridge between Nintendo’s foundational 1980s identity and its later long-term franchise stewardship',
+        ],
+      },
+    ],
+  },
+  'donkey-kong-country': {
+    sections: [
+      {
+        title: 'Story progression',
+        items: [
+          'Donkey Kong and Diddy Kong set out after King K. Rool steals the banana hoard',
+          'The journey moves through varied island zones that turn visual identity into part of the game’s momentum',
+          'Animal buddies and level gimmicks keep the platforming readable while constantly refreshing its rhythm',
+          'The final confrontation turns a revival project into a full modern franchise statement for the SNES era',
+        ],
+      },
+      {
+        title: 'Key characters',
+        items: ['Donkey Kong', 'Diddy Kong', 'King K. Rool', 'Cranky Kong'],
+      },
+      {
+        title: 'Accolades / legacy',
+        items: [
+          'Helped re-establish Donkey Kong as a major Nintendo franchise line for the 1990s',
+          'Useful in the pilot as an example of Nintendo refreshing a legacy character branch through partner-studio craft and presentation',
         ],
       },
     ],
