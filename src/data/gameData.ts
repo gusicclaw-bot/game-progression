@@ -816,6 +816,30 @@ export const gameDeepDive: Record<string, { sections: DeepDiveSection[] }> = {
       },
     ],
   },
+  'shadow-dragon-blade-of-light': {
+    sections: [
+      {
+        title: 'Story progression',
+        items: [
+          'Prince Marth begins in exile and slowly rebuilds a campaign to reclaim his kingdom',
+          'Map-by-map tactical battles turn army management and positioning into the core rhythm of the experience',
+          'Recruitment across the war broadens the story from a personal return into a continental conflict',
+          'The final push against Medeus frames strategy, roster building, and long-term planning as the series foundation',
+        ],
+      },
+      {
+        title: 'Key characters',
+        items: ['Marth', 'Caeda', 'Jagen', 'Medeus'],
+      },
+      {
+        title: 'Accolades / legacy',
+        items: [
+          'Established the core strategic and character-driven template that later Fire Emblem games would evolve',
+          'Useful in the pilot as the origin point for Nintendo’s tactical RPG branch before later revivals like Awakening',
+        ],
+      },
+    ],
+  },
   'fire-emblem-awakening': {
     sections: [
       {
