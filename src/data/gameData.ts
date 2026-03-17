@@ -433,4 +433,28 @@ export const gameDeepDive: Record<string, { sections: DeepDiveSection[] }> = {
       },
     ],
   },
+  'metroid-prime': {
+    sections: [
+      {
+        title: 'Story progression',
+        items: [
+          'Samus answers a distress signal and arrives over Tallon IV',
+          'Pirate research and Chozo ruins turn the campaign into layered environmental investigation',
+          'Artifact gathering reframes the late game around world mastery rather than simple corridor clearing',
+          'The finale pits the player against Meta Ridley and the corrupted power at the planet’s core',
+        ],
+      },
+      {
+        title: 'Key characters',
+        items: ['Samus Aran', 'Meta Ridley', 'Space Pirates', 'Chozo legacy'],
+      },
+      {
+        title: 'Accolades / legacy',
+        items: [
+          'Widely treated as one of Nintendo’s strongest early-2000s franchise revivals',
+          'Shows how Retro Studios translated Metroid into 3D without losing its atmosphere-first identity',
+        ],
+      },
+    ],
+  },
 }
