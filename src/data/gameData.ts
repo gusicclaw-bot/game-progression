@@ -163,6 +163,22 @@ export const timelineEvents: TimelineEvent[] = [
     summary: 'The Xenoblade branch shows Nintendo supporting large-scale, systems-rich RPG design as part of its long-term first-party and partner portfolio.',
     relatedNodeIds: ['xenoblade-chronicles', 'xenoblade-franchise', 'monolith-soft'],
   },
+  {
+    id: 'zelda-begins',
+    eraId: 'studio-foundations',
+    yearLabel: '1986',
+    title: 'The Legend of Zelda begins Nintendo’s adventure lineage',
+    summary: 'Zelda gives the graph a foundational exploration-and-puzzle branch, broadening Nintendo’s early identity beyond action and platforming alone.',
+    relatedNodeIds: ['zelda-franchise', 'nintendo', 'shigeru-miyamoto'],
+  },
+  {
+    id: 'ocarina-redefines-3d-adventure',
+    eraId: 'global-breakthrough',
+    yearLabel: '1998',
+    title: 'Ocarina of Time becomes a defining 3D adventure milestone',
+    summary: 'A later Zelda landmark shows how Nintendo translated one of its foundational series into the 3D era with lasting design influence.',
+    relatedNodeIds: ['ocarina-of-time', 'zelda-franchise', 'nintendo-64'],
+  },
 ]
 
 export const nodes: NodeRecord[] = [
@@ -502,6 +518,54 @@ export const nodes: NodeRecord[] = [
     highlights: ['Seventh generation', 'Nintendo home console', 'Broad audience era'],
     timelineTags: ['leadership-legacy'],
   },
+  {
+    id: 'shigeru-miyamoto',
+    label: 'Shigeru Miyamoto',
+    kind: 'person',
+    era: '1952 → now',
+    x: 47,
+    y: 40,
+    description:
+      'A creator node that helps the pilot connect Nintendo’s early design philosophy to multiple major franchise lineages, including Zelda as a foundational adventure branch.',
+    highlights: ['Nintendo designer', 'Franchise creator', 'Creative leadership'],
+    timelineTags: ['studio-foundations', 'global-breakthrough', 'leadership-legacy'],
+  },
+  {
+    id: 'ocarina-of-time',
+    label: 'The Legend of Zelda: Ocarina of Time',
+    kind: 'game',
+    era: '1998',
+    x: 74,
+    y: 41,
+    description:
+      'A landmark 3D adventure game that helps the graph show how a foundational Nintendo franchise evolved into one of the medium’s most influential design reference points.',
+    highlights: ['Nintendo 64', '3D adventure', 'Design landmark'],
+    timelineTags: ['global-breakthrough', 'leadership-legacy'],
+  },
+  {
+    id: 'zelda-franchise',
+    label: 'The Legend of Zelda',
+    kind: 'franchise',
+    era: '1986 → now',
+    x: 89,
+    y: 41,
+    description:
+      'A franchise node representing Nintendo’s adventure lineage, useful for balancing the graph with a branch centered on exploration, puzzle-solving, and long-term world design.',
+    highlights: ['Adventure series', 'Exploration', 'Nintendo pillar'],
+    timelineTags: ['studio-foundations', 'global-breakthrough', 'leadership-legacy'],
+  },
+  {
+    id: 'nintendo-64',
+    label: 'Nintendo 64',
+    kind: 'platform',
+    era: '1996 → 2002',
+    x: 60,
+    y: 42,
+    description:
+      'A platform node that helps situate Ocarina of Time within Nintendo’s 3D transition, showing how hardware context shaped one of the company’s most influential adventure games.',
+    highlights: ['Fifth generation', 'Nintendo home console', '3D transition era'],
+    timelineTags: ['global-breakthrough', 'leadership-legacy'],
+  },
 ]
 
 export const edges: EdgeRecord[] = [
@@ -556,6 +620,13 @@ export const edges: EdgeRecord[] = [
   { from: 'monolith-soft', to: 'xenoblade-franchise', label: 'defines modern RPG branch' },
   { from: 'xenoblade-chronicles', to: 'xenoblade-franchise', label: 'belongs to franchise' },
   { from: 'xenoblade-chronicles', to: 'wii', label: 'released on platform' },
+  { from: 'nintendo', to: 'zelda-franchise', label: 'brand steward / publisher' },
+  { from: 'nintendo', to: 'nintendo-64', label: 'platform holder' },
+  { from: 'shigeru-miyamoto', to: 'nintendo', label: 'long-term creative leader' },
+  { from: 'shigeru-miyamoto', to: 'zelda-franchise', label: 'helped define adventure identity' },
+  { from: 'ocarina-of-time', to: 'zelda-franchise', label: 'belongs to franchise' },
+  { from: 'ocarina-of-time', to: 'nintendo-64', label: 'released on platform' },
+  { from: 'zelda-franchise', to: 'nintendo-64', label: 'reaches 3D landmark on platform' },
 ]
 
 export const kindLabels: Record<NodeKind, string> = {
@@ -730,6 +801,30 @@ export const gameDeepDive: Record<string, { sections: DeepDiveSection[] }> = {
         items: [
           'Helped define Monolith Soft as one of Nintendo’s modern prestige-RPG studios',
           'Useful in the pilot as proof that the Nintendo ecosystem supports expansive, systems-heavy worlds alongside its more immediate mass-market franchises',
+        ],
+      },
+    ],
+  },
+  'ocarina-of-time': {
+    sections: [
+      {
+        title: 'Story progression',
+        items: [
+          'Young Link begins in Kokiri Forest before the quest expands across Hyrule',
+          'Time travel turns the adventure into a contrast between innocence, loss, and responsibility',
+          'The temple structure gives the journey a strong rhythm of discovery, puzzle-solving, and escalation',
+          'The finale against Ganondorf turns the game into a defining heroic arc for Nintendo’s adventure lineage',
+        ],
+      },
+      {
+        title: 'Key characters',
+        items: ['Link', 'Princess Zelda', 'Ganondorf', 'Navi'],
+      },
+      {
+        title: 'Accolades / legacy',
+        items: [
+          'Frequently treated as one of Nintendo’s most influential 3D design landmarks',
+          'Useful in the pilot as a bridge between Nintendo’s foundational 1980s identity and its later long-term franchise stewardship',
         ],
       },
     ],
