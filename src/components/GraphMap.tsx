@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useMemo, useRef, useState, type MouseEvent, type TouchEvent, type WheelEvent } from 'react'
 import type { EdgeRecord, GraphControls, NodeRecord } from '../types/gameData'
 
 type GraphMapProps = {
@@ -11,6 +11,22 @@ type GraphMapProps = {
   resetToken: number
   onSelect: (id: string) => void
 }
+
+type ViewBoxRect = {
+  x: number
+  y: number
+  width: number
+  height: number
+}
+
+type PanOffset = {
+  x: number
+  y: number
+}
+
+const ROOT_VIEW: ViewBoxRect = { x: 0, y: 0, width: 100, height: 60 }
+const CENTERED_VIEW_SIZE = { width: 56, height: 42 }
+const FOCUS_VIEW_SIZE = { width: 40, height: 30 }
 
 function nodeRadius(node: NodeRecord, isSelected: boolean): number {
   const importance = node.importance ?? 5
@@ -31,6 +47,38 @@ function shouldShowLabel(
   return importance >= 7
 }
 
+function clampZoom(value: number): number {
+  return Math.min(4, Math.max(1, Number(value.toFixed(2))))
+}
+
+function getCenteredView(node: NodeRecord, width: number, height: number): ViewBoxRect {
+  return {
+    x: node.x - width / 2,
+    y: node.y - height / 2,
+    width,
+    height,
+  }
+}
+
+function getFitView(nodes: NodeRecord[]): ViewBoxRect {
+  if (nodes.length === 0) return ROOT_VIEW
+
+  const minX = Math.min(...nodes.map((node) => node.x))
+  const maxX = Math.max(...nodes.map((node) => node.x))
+  const minY = Math.min(...nodes.map((node) => node.y))
+  const maxY = Math.max(...nodes.map((node) => node.y))
+
+  const paddingX = 8
+  const paddingY = 6
+
+  return {
+    x: minX - paddingX,
+    y: minY - paddingY,
+    width: Math.max(maxX - minX + paddingX * 2, 20),
+    height: Math.max(maxY - minY + paddingY * 2, 16),
+  }
+}
+
 export function GraphMap({
   nodes,
   edges,
@@ -38,19 +86,222 @@ export function GraphMap({
   connectedNodeIds,
   visibleNodeIds,
   controls,
+  resetToken,
   onSelect,
 }: GraphMapProps) {
   const [hoveredId, setHoveredId] = useState<string | null>(null)
+  const [zoomLevel, setZoomLevel] = useState(1)
+  const [panOffset, setPanOffset] = useState<PanOffset>({ x: 0, y: 0 })
+  const [viewMode, setViewMode] = useState<'default' | 'fit' | 'focus'>('default')
+  const [isDragging, setIsDragging] = useState(false)
+
+  const dragStateRef = useRef<{ x: number; y: number; panX: number; panY: number } | null>(null)
+  const pinchStateRef = useRef<{ distance: number; zoom: number } | null>(null)
+
   const selectedNode = nodes.find((node) => node.id === selectedId)
-  const visibleCount = nodes.filter((node) => visibleNodeIds.has(node.id)).length
-  const viewBox =
-    selectedNode && controls.centerSelected
-      ? `${selectedNode.x - 28} ${selectedNode.y - 21} 56 42`
-      : '0 0 100 60'
+  const visibleNodes = useMemo(
+    () => nodes.filter((node) => visibleNodeIds.has(node.id)),
+    [nodes, visibleNodeIds],
+  )
+  const visibleCount = visibleNodes.length
+
+  useEffect(() => {
+    setZoomLevel(1)
+    setPanOffset({ x: 0, y: 0 })
+    setViewMode('default')
+  }, [resetToken])
+
+  const baseView = useMemo(() => {
+    if (viewMode === 'fit') return getFitView(visibleNodes)
+    if (viewMode === 'focus' && selectedNode) {
+      return getCenteredView(selectedNode, FOCUS_VIEW_SIZE.width, FOCUS_VIEW_SIZE.height)
+    }
+    if (selectedNode && controls.centerSelected) {
+      return getCenteredView(selectedNode, CENTERED_VIEW_SIZE.width, CENTERED_VIEW_SIZE.height)
+    }
+    return ROOT_VIEW
+  }, [controls.centerSelected, selectedNode, viewMode, visibleNodes])
+
+  const zoomWidth = baseView.width / zoomLevel
+  const zoomHeight = baseView.height / zoomLevel
+  const viewCenterX = baseView.x + baseView.width / 2 + panOffset.x
+  const viewCenterY = baseView.y + baseView.height / 2 + panOffset.y
+  const viewBox = `${viewCenterX - zoomWidth / 2} ${viewCenterY - zoomHeight / 2} ${zoomWidth} ${zoomHeight}`
+
+  const adjustZoom = (delta: number) => {
+    setZoomLevel((current) => clampZoom(current + delta))
+  }
+
+  const resetZoom = () => {
+    setZoomLevel(1)
+    setPanOffset({ x: 0, y: 0 })
+    setViewMode('default')
+  }
+
+  const fitVisibleNodes = () => {
+    setViewMode('fit')
+    setPanOffset({ x: 0, y: 0 })
+    setZoomLevel(1)
+  }
+
+  const focusSelectedNode = () => {
+    if (!selectedNode) return
+    setViewMode('focus')
+    setPanOffset({ x: 0, y: 0 })
+    setZoomLevel(1)
+  }
+
+  const handleWheel = (event: WheelEvent<SVGSVGElement>) => {
+    event.preventDefault()
+    setViewMode('default')
+    adjustZoom(event.deltaY > 0 ? -0.2 : 0.2)
+  }
+
+  const beginDrag = (clientX: number, clientY: number) => {
+    dragStateRef.current = {
+      x: clientX,
+      y: clientY,
+      panX: panOffset.x,
+      panY: panOffset.y,
+    }
+    setIsDragging(true)
+  }
+
+  const updateDrag = (clientX: number, clientY: number, widthPx: number, heightPx: number) => {
+    const dragState = dragStateRef.current
+    if (!dragState || widthPx === 0 || heightPx === 0) return
+
+    const dx = ((clientX - dragState.x) / widthPx) * zoomWidth
+    const dy = ((clientY - dragState.y) / heightPx) * zoomHeight
+
+    setPanOffset({
+      x: dragState.panX - dx,
+      y: dragState.panY - dy,
+    })
+  }
+
+  const endDrag = () => {
+    dragStateRef.current = null
+    setIsDragging(false)
+  }
+
+  const handleMouseDown = (event: MouseEvent<SVGSVGElement>) => {
+    if (event.button !== 0) return
+    beginDrag(event.clientX, event.clientY)
+  }
+
+  const handleMouseMove = (event: MouseEvent<SVGSVGElement>) => {
+    if (!dragStateRef.current) return
+    const rect = event.currentTarget.getBoundingClientRect()
+    updateDrag(event.clientX, event.clientY, rect.width, rect.height)
+  }
+
+  const handleTouchStart = (event: TouchEvent<SVGSVGElement>) => {
+    if (event.touches.length === 1) {
+      const touch = event.touches[0]
+      beginDrag(touch.clientX, touch.clientY)
+      pinchStateRef.current = null
+      return
+    }
+
+    if (event.touches.length === 2) {
+      const [firstTouch, secondTouch] = Array.from(event.touches)
+      const distance = Math.hypot(
+        secondTouch.clientX - firstTouch.clientX,
+        secondTouch.clientY - firstTouch.clientY,
+      )
+      pinchStateRef.current = { distance, zoom: zoomLevel }
+      dragStateRef.current = null
+      setIsDragging(false)
+    }
+  }
+
+  const handleTouchMove = (event: TouchEvent<SVGSVGElement>) => {
+    if (event.touches.length === 1 && dragStateRef.current) {
+      event.preventDefault()
+      const touch = event.touches[0]
+      const rect = event.currentTarget.getBoundingClientRect()
+      updateDrag(touch.clientX, touch.clientY, rect.width, rect.height)
+      return
+    }
+
+    if (event.touches.length === 2 && pinchStateRef.current) {
+      event.preventDefault()
+      const [firstTouch, secondTouch] = Array.from(event.touches)
+      const distance = Math.hypot(
+        secondTouch.clientX - firstTouch.clientX,
+        secondTouch.clientY - firstTouch.clientY,
+      )
+      const zoomRatio = distance / pinchStateRef.current.distance
+      setViewMode('default')
+      setZoomLevel(clampZoom(pinchStateRef.current.zoom * zoomRatio))
+    }
+  }
+
+  const handleTouchEnd = () => {
+    if (pinchStateRef.current) {
+      pinchStateRef.current = null
+    }
+    if (dragStateRef.current) {
+      endDrag()
+    }
+  }
 
   return (
-    <div className="graph-stage">
-      <svg viewBox={viewBox} className="graph-svg" aria-label="Game industry relationship map">
+    <div className={`graph-stage ${isDragging ? 'dragging' : ''}`}>
+      <div className="graph-zoom-controls" aria-label="Graph zoom controls">
+        <button
+          type="button"
+          className="graph-zoom-button"
+          onClick={() => {
+            setViewMode('default')
+            adjustZoom(-0.2)
+          }}
+          disabled={zoomLevel <= 1}
+        >
+          −
+        </button>
+        <span className="graph-zoom-readout">{Math.round(zoomLevel * 100)}%</span>
+        <button
+          type="button"
+          className="graph-zoom-button"
+          onClick={() => {
+            setViewMode('default')
+            adjustZoom(0.2)
+          }}
+          disabled={zoomLevel >= 4}
+        >
+          +
+        </button>
+        <button type="button" className="graph-zoom-button reset" onClick={resetZoom}>
+          Reset zoom
+        </button>
+        <button type="button" className="graph-zoom-button reset" onClick={fitVisibleNodes}>
+          Fit visible
+        </button>
+        <button
+          type="button"
+          className="graph-zoom-button reset"
+          onClick={focusSelectedNode}
+          disabled={!selectedNode}
+        >
+          Focus selected
+        </button>
+      </div>
+
+      <svg
+        viewBox={viewBox}
+        className="graph-svg"
+        aria-label="Game industry relationship map"
+        onWheel={handleWheel}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={endDrag}
+        onMouseLeave={endDrag}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
         {edges.map((edge) => {
           const from = nodes.find((node) => node.id === edge.from)
           const to = nodes.find((node) => node.id === edge.to)
@@ -110,7 +361,7 @@ export function GraphMap({
                 r={r}
                 className={`node ${node.kind} ${isSelected ? 'selected' : ''} ${isConnected ? 'connected' : ''} ${isDimmed ? 'dimmed' : ''} ${isHovered ? 'hovered' : ''}`}
                 onClick={() => onSelect(node.id)}
-                style={{ cursor: 'pointer' }}
+                style={{ cursor: isDragging ? 'grabbing' : 'pointer' }}
               />
               {showLabel ? (
                 <text
