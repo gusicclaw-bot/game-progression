@@ -147,6 +147,22 @@ export const timelineEvents: TimelineEvent[] = [
     summary: 'A later franchise milestone shows how Nintendo’s ecosystem can preserve a niche lineage and then reframe it for broader modern visibility.',
     relatedNodeIds: ['fire-emblem-awakening', 'fire-emblem-franchise', 'nintendo-3ds', 'intelligent-systems'],
   },
+  {
+    id: 'monolith-joins-nintendo-world',
+    eraId: 'leadership-legacy',
+    yearLabel: '2007',
+    title: 'Monolith Soft becomes part of Nintendo’s broader studio ecosystem',
+    summary: 'Nintendo strengthens its modern RPG bench through closer ties with Monolith Soft, adding another durable creative lineage to the network.',
+    relatedNodeIds: ['monolith-soft', 'nintendo'],
+  },
+  {
+    id: 'xenoblade-breakthrough',
+    eraId: 'leadership-legacy',
+    yearLabel: '2010',
+    title: 'Xenoblade Chronicles establishes a modern Nintendo RPG pillar',
+    summary: 'The Xenoblade branch shows Nintendo supporting large-scale, systems-rich RPG design as part of its long-term first-party and partner portfolio.',
+    relatedNodeIds: ['xenoblade-chronicles', 'xenoblade-franchise', 'monolith-soft'],
+  },
 ]
 
 export const nodes: NodeRecord[] = [
@@ -438,6 +454,54 @@ export const nodes: NodeRecord[] = [
     highlights: ['Handheld', 'Portable strategy audience', 'Modern Nintendo era'],
     timelineTags: ['leadership-legacy'],
   },
+  {
+    id: 'monolith-soft',
+    label: 'Monolith Soft',
+    kind: 'studio',
+    era: '1999 → now',
+    x: 43,
+    y: 20,
+    description:
+      'A studio node that gives the pilot a modern large-scale RPG branch, showing how Nintendo’s ecosystem also includes ambitious worldbuilding-heavy teams beyond its more immediately mascot-driven lines.',
+    highlights: ['RPG studio', 'Nintendo-affiliated', 'Large-scale world design'],
+    timelineTags: ['leadership-legacy'],
+  },
+  {
+    id: 'xenoblade-chronicles',
+    label: 'Xenoblade Chronicles',
+    kind: 'game',
+    era: '2010',
+    x: 73,
+    y: 18,
+    description:
+      'A landmark modern RPG that helps the graph represent Nintendo’s role in sustaining ambitious, systems-heavy adventure design with a very different tone and scale from Pokémon or Fire Emblem.',
+    highlights: ['Wii', 'Modern RPG', 'Open-area exploration'],
+    timelineTags: ['leadership-legacy'],
+  },
+  {
+    id: 'xenoblade-franchise',
+    label: 'Xenoblade Chronicles',
+    kind: 'franchise',
+    era: '2010 → now',
+    x: 89,
+    y: 16,
+    description:
+      'A franchise node representing Nintendo’s modern prestige-RPG branch, useful for showing that the ecosystem contains not just mascots and handheld hits but also expansive worldbuilding-driven series.',
+    highlights: ['JRPG lineage', 'Modern Nintendo brand', 'Expansive worlds'],
+    timelineTags: ['leadership-legacy'],
+  },
+  {
+    id: 'wii',
+    label: 'Wii',
+    kind: 'platform',
+    era: '2006 → 2013',
+    x: 60,
+    y: 18,
+    description:
+      'A platform node that helps place Xenoblade Chronicles within Nintendo’s late-2000s hardware strategy, showing the company’s home-console ecosystem supporting more ambitious RPG experiments as well as mass-market hits.',
+    highlights: ['Seventh generation', 'Nintendo home console', 'Broad audience era'],
+    timelineTags: ['leadership-legacy'],
+  },
 ]
 
 export const edges: EdgeRecord[] = [
@@ -485,6 +549,13 @@ export const edges: EdgeRecord[] = [
   { from: 'fire-emblem-awakening', to: 'fire-emblem-franchise', label: 'belongs to franchise' },
   { from: 'fire-emblem-franchise', to: 'nintendo-3ds', label: 'finds renewed momentum on platform' },
   { from: 'fire-emblem-awakening', to: 'nintendo-3ds', label: 'released on platform' },
+  { from: 'nintendo', to: 'monolith-soft', label: 'owns / supports studio ecosystem' },
+  { from: 'nintendo', to: 'xenoblade-franchise', label: 'brand steward / publisher' },
+  { from: 'nintendo', to: 'wii', label: 'platform holder' },
+  { from: 'monolith-soft', to: 'xenoblade-chronicles', label: 'developed' },
+  { from: 'monolith-soft', to: 'xenoblade-franchise', label: 'defines modern RPG branch' },
+  { from: 'xenoblade-chronicles', to: 'xenoblade-franchise', label: 'belongs to franchise' },
+  { from: 'xenoblade-chronicles', to: 'wii', label: 'released on platform' },
 ]
 
 export const kindLabels: Record<NodeKind, string> = {
@@ -635,6 +706,30 @@ export const gameDeepDive: Record<string, { sections: DeepDiveSection[] }> = {
         items: [
           'Widely credited with helping Fire Emblem reach a broader modern audience',
           'Useful in the pilot as an example of a Nintendo lineage surviving long enough to be revived for a new handheld era',
+        ],
+      },
+    ],
+  },
+  'xenoblade-chronicles': {
+    sections: [
+      {
+        title: 'Story progression',
+        items: [
+          'Shulk’s discovery of the Monado sets the conflict between Bionis and Mechonis in motion',
+          'The party’s journey expands from personal revenge into a much larger struggle over fate and world order',
+          'Large explorable regions make the sense of scale part of the game’s identity rather than just background scenery',
+          'The finale reframes the adventure around freedom from inherited systems and imposed destiny',
+        ],
+      },
+      {
+        title: 'Key characters',
+        items: ['Shulk', 'Fiora', 'Reyn', 'Melia'],
+      },
+      {
+        title: 'Accolades / legacy',
+        items: [
+          'Helped define Monolith Soft as one of Nintendo’s modern prestige-RPG studios',
+          'Useful in the pilot as proof that the Nintendo ecosystem supports expansive, systems-heavy worlds alongside its more immediate mass-market franchises',
         ],
       },
     ],
