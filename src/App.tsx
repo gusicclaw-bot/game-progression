@@ -186,7 +186,7 @@ function App() {
               <p className="eyebrow">Pilot experience</p>
               <h2>Interactive knowledge graph</h2>
             </div>
-            <p className="muted">19 nodes · 34 relationships · search, filter, focus, and timeline context.</p>
+            <p className="muted">24 nodes · 44 relationships · search, filter, focus, and timeline context.</p>
           </div>
 
           <div className="control-stack">

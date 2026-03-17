@@ -131,6 +131,22 @@ export const timelineEvents: TimelineEvent[] = [
     summary: 'Retro Studios helps reframe Metroid for a new platform generation, showing how Nintendo can extend a legacy franchise through a newly acquired studio.',
     relatedNodeIds: ['metroid-prime', 'retro-studios', 'gamecube', 'metroid-franchise'],
   },
+  {
+    id: 'fire-emblem-debut',
+    eraId: 'global-breakthrough',
+    yearLabel: '1990',
+    title: 'Fire Emblem begins Nintendo’s tactical RPG lineage',
+    summary: 'Intelligent Systems helps give Nintendo a strategy-heavy branch, adding a different kind of long-term franchise identity to the ecosystem.',
+    relatedNodeIds: ['fire-emblem-franchise', 'intelligent-systems', 'shadow-dragon-blade-of-light'],
+  },
+  {
+    id: 'awakening-revival',
+    eraId: 'leadership-legacy',
+    yearLabel: '2012',
+    title: 'Fire Emblem Awakening helps stabilize the series on Nintendo 3DS',
+    summary: 'A later franchise milestone shows how Nintendo’s ecosystem can preserve a niche lineage and then reframe it for broader modern visibility.',
+    relatedNodeIds: ['fire-emblem-awakening', 'fire-emblem-franchise', 'nintendo-3ds', 'intelligent-systems'],
+  },
 ]
 
 export const nodes: NodeRecord[] = [
@@ -193,6 +209,18 @@ export const nodes: NodeRecord[] = [
       'A first-party Nintendo studio in North America, included here to hint at the broader global shape of the ecosystem beyond the initial Japan-centered cluster.',
     highlights: ['First-party studio', 'North America', 'Nintendo ownership'],
     timelineTags: ['leadership-legacy'],
+  },
+  {
+    id: 'intelligent-systems',
+    label: 'Intelligent Systems',
+    kind: 'studio',
+    era: '1986 → now',
+    x: 42,
+    y: 28,
+    description:
+      'A long-running Nintendo-affiliated studio whose strategy and systems-heavy work adds a different creative branch to the ecosystem than the action, platforming, and monster-collection lines already in the pilot.',
+    highlights: ['Strategy RPGs', 'Nintendo-affiliated', 'Systems design'],
+    timelineTags: ['studio-foundations', 'global-breakthrough', 'leadership-legacy'],
   },
   {
     id: 'satoru-iwata',
@@ -362,6 +390,54 @@ export const nodes: NodeRecord[] = [
     highlights: ['Sixth generation', 'Nintendo home console', '3D-era experimentation'],
     timelineTags: ['leadership-legacy'],
   },
+  {
+    id: 'shadow-dragon-blade-of-light',
+    label: 'Fire Emblem: Shadow Dragon and the Blade of Light',
+    kind: 'game',
+    era: '1990',
+    x: 72,
+    y: 26,
+    description:
+      'The original Fire Emblem release gives the pilot a foundational tactical RPG branch, showing Nintendo’s ecosystem supporting slower, more systems-driven design traditions alongside its broader mass-market hits.',
+    highlights: ['Famicom', 'Strategy RPG', 'Series debut'],
+    timelineTags: ['global-breakthrough'],
+  },
+  {
+    id: 'fire-emblem-awakening',
+    label: 'Fire Emblem Awakening',
+    kind: 'game',
+    era: '2012',
+    x: 74,
+    y: 34,
+    description:
+      'A modern Fire Emblem landmark that helps explain how a long-running but narrower Nintendo franchise could regain momentum and become more widely visible in the handheld era.',
+    highlights: ['Nintendo 3DS', 'Modern revival', 'Strategy RPG'],
+    timelineTags: ['leadership-legacy'],
+  },
+  {
+    id: 'fire-emblem-franchise',
+    label: 'Fire Emblem',
+    kind: 'franchise',
+    era: '1990 → now',
+    x: 89,
+    y: 29,
+    description:
+      'A franchise node representing Nintendo’s tactical RPG lineage, useful for balancing the pilot with a branch built around strategy, war drama, and long-term systems design rather than platforming or collection alone.',
+    highlights: ['Tactical RPG', 'Long-running strategy series', 'Nintendo ecosystem'],
+    timelineTags: ['global-breakthrough', 'leadership-legacy'],
+  },
+  {
+    id: 'nintendo-3ds',
+    label: 'Nintendo 3DS',
+    kind: 'platform',
+    era: '2011 → 2020',
+    x: 60,
+    y: 36,
+    description:
+      'A handheld platform node that helps situate Fire Emblem Awakening within Nintendo’s modern portable strategy for sustaining and reviving niche-but-important franchise lines.',
+    highlights: ['Handheld', 'Portable strategy audience', 'Modern Nintendo era'],
+    timelineTags: ['leadership-legacy'],
+  },
 ]
 
 export const edges: EdgeRecord[] = [
@@ -399,6 +475,16 @@ export const edges: EdgeRecord[] = [
   { from: 'metroid-prime', to: 'gamecube', label: 'released on platform' },
   { from: 'yoshio-sakamoto', to: 'nintendo', label: 'long-term creative leader' },
   { from: 'yoshio-sakamoto', to: 'metroid-franchise', label: 'helped shape long-term identity' },
+  { from: 'nintendo', to: 'intelligent-systems', label: 'publishes / collaborates with' },
+  { from: 'nintendo', to: 'fire-emblem-franchise', label: 'brand steward / publisher' },
+  { from: 'nintendo', to: 'nintendo-3ds', label: 'platform holder' },
+  { from: 'intelligent-systems', to: 'fire-emblem-franchise', label: 'helps define strategy lineage' },
+  { from: 'intelligent-systems', to: 'shadow-dragon-blade-of-light', label: 'developed' },
+  { from: 'intelligent-systems', to: 'fire-emblem-awakening', label: 'developed' },
+  { from: 'shadow-dragon-blade-of-light', to: 'fire-emblem-franchise', label: 'belongs to franchise' },
+  { from: 'fire-emblem-awakening', to: 'fire-emblem-franchise', label: 'belongs to franchise' },
+  { from: 'fire-emblem-franchise', to: 'nintendo-3ds', label: 'finds renewed momentum on platform' },
+  { from: 'fire-emblem-awakening', to: 'nintendo-3ds', label: 'released on platform' },
 ]
 
 export const kindLabels: Record<NodeKind, string> = {
@@ -525,6 +611,30 @@ export const gameDeepDive: Record<string, { sections: DeepDiveSection[] }> = {
         items: [
           'Widely treated as one of Nintendo’s strongest early-2000s franchise revivals',
           'Shows how Retro Studios translated Metroid into 3D without losing its atmosphere-first identity',
+        ],
+      },
+    ],
+  },
+  'fire-emblem-awakening': {
+    sections: [
+      {
+        title: 'Story progression',
+        items: [
+          'Chrom’s Shepherds rescue Robin and become the campaign’s initial anchor point',
+          'Political conflict in Ylisse and Plegia gradually scales into a wider continental war',
+          'The children system turns the middle of the game into a generational strategy twist',
+          'The final arc frames personal bonds and tactical planning as the route to stopping Grima',
+        ],
+      },
+      {
+        title: 'Key characters',
+        items: ['Chrom', 'Robin', 'Lucina', 'Grima'],
+      },
+      {
+        title: 'Accolades / legacy',
+        items: [
+          'Widely credited with helping Fire Emblem reach a broader modern audience',
+          'Useful in the pilot as an example of a Nintendo lineage surviving long enough to be revived for a new handheld era',
         ],
       },
     ],
