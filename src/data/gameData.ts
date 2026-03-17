@@ -52,6 +52,14 @@ export const timelineEvents: TimelineEvent[] = [
     relatedNodeIds: ['hal'],
   },
   {
+    id: 'metroid-debut',
+    eraId: 'studio-foundations',
+    yearLabel: '1986',
+    title: 'Metroid debuts on Famicom Disk System',
+    summary: 'Nintendo adds a darker sci-fi branch to its growing first-party identity, creating the foundation for one of its most influential exploration franchises.',
+    relatedNodeIds: ['metroid-franchise', 'nintendo'],
+  },
+  {
     id: 'gamefreak-founded',
     eraId: 'studio-foundations',
     yearLabel: '1989',
@@ -114,6 +122,14 @@ export const timelineEvents: TimelineEvent[] = [
     title: 'Retro Studios becomes a first-party Nintendo studio',
     summary: 'The ecosystem expands beyond Japan through ownership, showing another path by which Nintendo curates its network.',
     relatedNodeIds: ['retro-studios', 'nintendo'],
+  },
+  {
+    id: 'metroid-prime-arrives',
+    eraId: 'leadership-legacy',
+    yearLabel: '2002',
+    title: 'Metroid Prime revives the franchise in 3D on GameCube',
+    summary: 'Retro Studios helps reframe Metroid for a new platform generation, showing how Nintendo can extend a legacy franchise through a newly acquired studio.',
+    relatedNodeIds: ['metroid-prime', 'retro-studios', 'gamecube', 'metroid-franchise'],
   },
 ]
 
@@ -298,6 +314,54 @@ export const nodes: NodeRecord[] = [
     highlights: ['16-bit era', 'Nintendo home console', 'Franchise showcase'],
     timelineTags: ['global-breakthrough', 'leadership-legacy'],
   },
+  {
+    id: 'yoshio-sakamoto',
+    label: 'Yoshio Sakamoto',
+    kind: 'person',
+    era: '1959 → now',
+    x: 47,
+    y: 64,
+    description:
+      'A Nintendo creative leader whose work helps connect the Metroid branch across multiple eras, making the graph feel less like isolated products and more like an authored lineage.',
+    highlights: ['Nintendo R&D', 'Metroid stewardship', 'Creative continuity'],
+    timelineTags: ['studio-foundations', 'global-breakthrough', 'leadership-legacy'],
+  },
+  {
+    id: 'metroid-prime',
+    label: 'Metroid Prime',
+    kind: 'game',
+    era: '2002',
+    x: 73,
+    y: 66,
+    description:
+      'A major revival point for Metroid, useful in the pilot because it shows how Nintendo could hand a legacy franchise to Retro Studios and still preserve a coherent identity.',
+    highlights: ['GameCube', 'First-person adventure', 'Franchise revival'],
+    timelineTags: ['leadership-legacy'],
+  },
+  {
+    id: 'metroid-franchise',
+    label: 'Metroid',
+    kind: 'franchise',
+    era: '1986 → now',
+    x: 88,
+    y: 64,
+    description:
+      'A franchise node representing Nintendo’s darker exploration lineage, linking internal creative leadership with later first-party studio evolution through Retro Studios.',
+    highlights: ['Sci-fi exploration', 'Atmosphere', 'Long-running Nintendo franchise'],
+    timelineTags: ['studio-foundations', 'global-breakthrough', 'leadership-legacy'],
+  },
+  {
+    id: 'gamecube',
+    label: 'Nintendo GameCube',
+    kind: 'platform',
+    era: '2001 → 2007',
+    x: 60,
+    y: 67,
+    description:
+      'A platform node that helps explain the technical and strategic context around Metroid Prime and Nintendo’s early-2000s first-party portfolio.',
+    highlights: ['Sixth generation', 'Nintendo home console', '3D-era experimentation'],
+    timelineTags: ['leadership-legacy'],
+  },
 ]
 
 export const edges: EdgeRecord[] = [
@@ -327,6 +391,14 @@ export const edges: EdgeRecord[] = [
   { from: 'satoru-iwata', to: 'nintendo', label: 'later president' },
   { from: 'masahiro-sakurai', to: 'hal', label: 'early creative leader' },
   { from: 'masahiro-sakurai', to: 'kirby-franchise', label: 'helped define early identity' },
+  { from: 'nintendo', to: 'metroid-franchise', label: 'brand steward / publisher' },
+  { from: 'nintendo', to: 'gamecube', label: 'platform holder' },
+  { from: 'retro-studios', to: 'metroid-prime', label: 'developed' },
+  { from: 'retro-studios', to: 'metroid-franchise', label: 'helped revive in 3D era' },
+  { from: 'metroid-prime', to: 'metroid-franchise', label: 'belongs to franchise' },
+  { from: 'metroid-prime', to: 'gamecube', label: 'released on platform' },
+  { from: 'yoshio-sakamoto', to: 'nintendo', label: 'long-term creative leader' },
+  { from: 'yoshio-sakamoto', to: 'metroid-franchise', label: 'helped shape long-term identity' },
 ]
 
 export const kindLabels: Record<NodeKind, string> = {
